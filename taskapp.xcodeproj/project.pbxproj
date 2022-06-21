@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		33E01FD2973AA3D30CD1577B /* Pods_taskapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCA02E027AAC87D3C0A8D291 /* Pods_taskapp.framework */; };
 		EE40A380285B452F0030348B /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE40A37F285B452F0030348B /* Category.swift */; };
+		EE40A386285C744C0030348B /* InputCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE40A385285C744C0030348B /* InputCategoryViewController.swift */; };
 		EE4E8BFE28599996002E6C6F /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E8BFD28599996002E6C6F /* InputViewController.swift */; };
 		EE4E8C022859C162002E6C6F /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E8C012859C162002E6C6F /* Task.swift */; };
 		EE4E8C09285AF9CD002E6C6F /* UIColorHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E8C08285AF9CD002E6C6F /* UIColorHex.swift */; };
@@ -24,6 +25,7 @@
 		A28A50D4BC2CBECE75222ADF /* Pods-taskapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taskapp.release.xcconfig"; path = "Target Support Files/Pods-taskapp/Pods-taskapp.release.xcconfig"; sourceTree = "<group>"; };
 		B107EEBFE3D2BC8E1B29AB35 /* Pods-taskapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taskapp.debug.xcconfig"; path = "Target Support Files/Pods-taskapp/Pods-taskapp.debug.xcconfig"; sourceTree = "<group>"; };
 		EE40A37F285B452F0030348B /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		EE40A385285C744C0030348B /* InputCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCategoryViewController.swift; sourceTree = "<group>"; };
 		EE4E8BFD28599996002E6C6F /* InputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewController.swift; sourceTree = "<group>"; };
 		EE4E8C012859C162002E6C6F /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		EE4E8C08285AF9CD002E6C6F /* UIColorHex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorHex.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				EE4F12EF285976A500EC79F9 /* SceneDelegate.swift */,
 				EE4F12F1285976A500EC79F9 /* ViewController.swift */,
 				EE4E8BFD28599996002E6C6F /* InputViewController.swift */,
+				EE40A385285C744C0030348B /* InputCategoryViewController.swift */,
 				EE4E8C012859C162002E6C6F /* Task.swift */,
 				EE40A37F285B452F0030348B /* Category.swift */,
 				EE4F12F3285976A500EC79F9 /* Main.storyboard */,
@@ -221,6 +224,7 @@
 				EE4F12F2285976A500EC79F9 /* ViewController.swift in Sources */,
 				EE4F12EE285976A500EC79F9 /* AppDelegate.swift in Sources */,
 				EE4E8C022859C162002E6C6F /* Task.swift in Sources */,
+				EE40A386285C744C0030348B /* InputCategoryViewController.swift in Sources */,
 				EE4E8C09285AF9CD002E6C6F /* UIColorHex.swift in Sources */,
 				EE4F12F0285976A500EC79F9 /* SceneDelegate.swift in Sources */,
 				EE4E8BFE28599996002E6C6F /* InputViewController.swift in Sources */,

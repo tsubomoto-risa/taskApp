@@ -9,17 +9,19 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var filterTextField: UITextField!
     
     // Realmインスタンスを取得する
     let realm = try! Realm()
     
     //DBレコードが格納される入れる、日付でソート
-    var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+    var taskList = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
     
-    var categryArray = try! Realm().objects(Category.self)
+    var categoryList = try! Realm().objects(Category.self)
+    var categoryPicker: UIPickerView!
     
     //VC生成時に１度だけ呼ばれる
     override func viewDidLoad() {
@@ -30,16 +32,30 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         tableView.delegate = self
         //tableviewのデータソースを自身(VC)とする
         tableView.dataSource = self
+        
+        //pickerの設定
+        let pointY = self.view.bounds.height
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 44)
+        let doneButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.donePicker))
+        toolbar.setItems([doneButtonItem], animated: true)
+        self.categoryPicker = UIPickerView()
+        self.categoryPicker.frame = CGRect(x: 0, y: pointY, width: self.view.bounds.width, height: 150.0)
+        self.categoryPicker.delegate = self
+        self.categoryPicker.dataSource = self
+        self.view.addSubview(self.categoryPicker)
+        self.filterTextField.inputAccessoryView = toolbar
+        self.filterTextField.inputView = self.categoryPicker
     }
     
     // segue で画面遷移する時に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         let inputViewController:InputViewController = segue.destination as! InputViewController
-
+        
         if segue.identifier == "cellSegue" {
             //編集の場合
             let indexPath = self.tableView.indexPathForSelectedRow
-            inputViewController.task = taskArray[indexPath!.row]
+            inputViewController.task = taskList[indexPath!.row]
         } else {
             //新規作成の場合
             let task = Task()
@@ -59,10 +75,48 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         tableView.reloadData()
     }
     
+    @IBAction func unwind(segue: UIStoryboardSegue) {
+    }
+    
+    // UIPickerViewのRowが選択された時の挙動
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.filterTextField.text = self.categoryList[row].name
+        let filteredTask = try! Realm().objects(Task.self).filter("categoryId == %@", self.categoryList[row].id).sorted(byKeyPath: "date", ascending: true)
+        self.taskList = filteredTask
+        tableView.reloadData()
+    }
+    
+    // UIPickerViewの行数、要素の全数
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return self.categoryList.count
+    }
+    
+    // UIPickerViewに表示する配列
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return self.categoryList[row].name
+    }
+    
+    // ひとつのPickerViewに対して、横にいくつドラムロールを並べるかを指定。通常は1でOK
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+        
+    }
+    
+    func CGRectMake(_ x: CGFloat, _ y: CGFloat, _ width: CGFloat, _ height: CGFloat) -> CGRect {
+        return CGRect(x: x, y: y, width: width, height: height)
+    }
+    
+    @objc func donePicker() {
+        let allTask = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+        self.taskList = allTask
+        self.filterTextField.text = ""
+        tableView.reloadData()
+        view.endEditing(true)
+    }
     /** delegateされたメソッド */
     //データの数（＝セルの数）を返すメソッド
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.taskArray.count
+        return self.taskList.count
     }
     // 各セルの内容を返すメソッド
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -71,7 +125,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         
         //cellに値を設定する
         //①title設定
-        let task = self.taskArray[indexPath.row]
+        let task = self.taskList[indexPath.row]
         cell.textLabel?.text = task.title
         //②時刻フォーマット設定
         let formatter = DateFormatter()
@@ -98,7 +152,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // 削除するタスクを取得
-            let task = self.taskArray[indexPath.row]
+            let task = self.taskList[indexPath.row]
             
             // ローカル通知をキャンセルする
             let center = UNUserNotificationCenter.current()
@@ -106,7 +160,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 
             try! realm.write {
                 //データベースから削除する
-                self.realm.delete(self.taskArray[indexPath.row])
+                self.realm.delete(self.taskList[indexPath.row])
                 //取得し直すわけではないので格納配列も削除
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
@@ -122,6 +176,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             }
         }
     }
-
+    
 }
 
